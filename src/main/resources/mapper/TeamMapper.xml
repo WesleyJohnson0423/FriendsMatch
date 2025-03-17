@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yanpeng.usercenterback.mapper.TeamMapper">
+
+    <resultMap id="BaseResultMap" type="com.yanpeng.usercenterback.model.domain.Team">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="maxNum" column="maxNum" jdbcType="INTEGER"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="expireTime" column="expireTime" jdbcType="TIMESTAMP"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+    <!-- 用户信息结果映射 -->
+    <resultMap id="UserResultMap" type="com.yanpeng.usercenterback.model.vo.UserVO">
+        <id property="id" column="user_id" jdbcType="BIGINT"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
+        <result property="avatarUrl" column="avatarUrl" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="tags" column="tags" jdbcType="VARCHAR"/>
+        <result property="profile" column="profile" jdbcType="VARCHAR"/>
+        <result property="userStatus" column="userStatus" jdbcType="INTEGER"/>
+        <result property="createTime" column="user_createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="user_updateTime" jdbcType="TIMESTAMP"/>
+        <result property="userRole" column="userRole" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 队伍及其用户信息结果映射 -->
+    <resultMap id="TeamWithUsersResultMap" type="com.yanpeng.usercenterback.model.vo.TeamUserVO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="maxNum" column="maxNum" jdbcType="INTEGER"/>
+        <result property="expireTime" column="expireTime" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <collection property="userVOList" ofType="com.yanpeng.usercenterback.model.vo.UserVO" resultMap="UserResultMap"/>
+    </resultMap>
+
+    <!-- 查询队伍及其包含的用户信息 -->
+    <select id="getUserListByTeamId" resultMap="TeamWithUsersResultMap">
+        SELECT
+            t.id,
+            t.name,
+            t.description,
+            t.maxNum,
+            t.expireTime,
+            t.userId,
+            t.status,
+            t.createTime,
+            t.updateTime,
+            u.id AS user_id,
+            u.username,
+            u.userAccount,
+            u.avatarUrl,
+            u.gender,
+            u.phone,
+            u.email,
+            u.tags,
+            u.profile,
+            u.userStatus,
+            u.createTime AS user_createTime,
+            u.updateTime AS user_updateTime,
+            u.userRole
+        FROM
+            team t
+                LEFT JOIN
+            user_team ut ON t.id = ut.teamId AND ut.isDelete = 0
+                LEFT JOIN
+            user u ON ut.userId = u.id AND u.isDelete = 0
+        WHERE
+            t.id = #{teamId}
+          AND t.isDelete = 0
+    </select>
+
+
+    <sql id="Base_Column_List">
+        id,name,description,
+        maxNum,password,expireTime,
+        userId,status,createTime,
+        updateTime,isDelete
+    </sql>
+</mapper>

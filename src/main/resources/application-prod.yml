@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://43.142.240.14:3306/friendmatch
+    username: friendmatch
+    password: wang20051010
+  data:
+    redis:
+      database: 0
+      port: 6379
+      host: 43.142.240.14
+      password: wang20051010
+  mvc:
+    static-path-pattern: /static/** # 配置静态资源路径模式
+  web:
+    resources:
+      static-locations: classpath:/static # 配置静态资源的位置
+server:
+  port: 8089
+  servlet:
+    context-path: /api
+    session:
+      cookie:
+        http-only: false
+        domain: 43.142.240.14
+        path: /

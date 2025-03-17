@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yanpeng
+    username: root
+    password: 123456
+  data:
+    redis:
+      database: 0
+      port: 6379
+      host: localhost
+      password: 
+  mvc:
+    static-path-pattern: /static/** # 配置静态资源路径模式
+  web:
+    resources:
+      static-locations: classpath:/static # 配置静态资源的位置
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+    session:
+      cookie:
+        http-only: false
+        domain: localhost
+        path: /
+      timeout:
+dromara:
+  x-file-storage: #文件存储配置
+    default-platform: aliyun-oss-1 #默认使用的存储平台
+    thumbnail-suffix: ".min.jpg" #缩略图后缀，例如【.min.jpg】【.png】
+    #对应平台的配置写在这里，注意缩进要对齐
+    aliyun-oss:
+      - platform: aliyun-oss-1 # 存储平台标识
+        enable-storage: true  # 启用存储
+        end-point: oss-cn-wuhan-lr.aliyuncs.com
+        bucket-name: friends-spring
+        domain: https://friends-spring.oss-cn-wuhan-lr.aliyuncs.com/ # 访问域名，注意“/”结尾，例如：https://abc.oss-cn-shanghai.aliyuncs.com/
+        base-path: friendImages/ # 基础路径
+
+
+
+
